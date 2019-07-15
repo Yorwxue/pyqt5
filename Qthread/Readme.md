@@ -1,5 +1,5 @@
-# emit can only get data passive by return function (from child thread to parent thread)
-# if you want to send data from parent thread to child thread, you can use queue
++ emit can only get data passive by return function (from child thread to parent thread)
++ if you want to send data from parent thread to child thread, you can use queue
 
 # emit
 ## Create thread to execute AuthWorker
