@@ -54,7 +54,7 @@ class Window(QtWidgets.QWidget):
         self.worker.moveToThread(self.thread)
 
         # target worker: Worker (generate)
-        self.gen_worker = Worker(self.queue)
+        self.gen_worker = gen_Worker(self.queue)
         self.gen_worker. moveToThread(self.gen_thread)
 
         # target worker: circulation of workers
@@ -177,6 +177,27 @@ class Worker(QtCore.QObject):
         # if SHOW: print("run in Worker")
         self.create_data()
         self.queue.put(self.data)
+        self.finished.emit()
+
+
+class gen_Worker(QtCore.QObject):
+    data = np.array([-1, -1, -1])
+    finished = QtCore.pyqtSignal()
+
+    def __init__(self, queue, parent=None):
+        super(gen_Worker, self).__init__(parent)
+        self.queue = queue
+
+    def create_data(self):
+        self.data = np.random.randint(0, 100, (3))
+
+    def generate(self):
+        while True:
+            self.create_data()
+            print("Generate new data to queue: ", self.data, end="")
+            self.queue.put(self.data)
+            print(", queue buffer: %d" % self.queue.qsize())
+            QtCore.QThread.sleep(3)
         self.finished.emit()
 
 
