@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QDataStream, QIODevice
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtNetwork import QTcpSocket, QAbstractSocket
+import numpy as np
 
 
 class Client(QDialog):
@@ -11,7 +12,9 @@ class Client(QDialog):
         self.makeRequest()
         self.tcpSocket.waitForConnected(1000)
         # send any message you like it could come from a widget text.
-        self.tcpSocket.write(b'hello')
+        # message = b'hello'
+        message = np.asarray([1, 2, 3]).tobytes()
+        self.tcpSocket.write(message)
         self.tcpSocket.readyRead.connect(self.dealCommunication)
         self.tcpSocket.error.connect(self.displayError)
 
